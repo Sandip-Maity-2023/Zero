@@ -51,7 +51,8 @@ const signup = async (req, res) => {
                 role: user.role,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                orgName: user.orgName
+                orgName: user.orgName,
+                registrationNo: user.registrationNo
             }
         });
     } catch (error) {
@@ -89,7 +90,8 @@ const login = async (req, res) => {
                 role: user.role,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                orgName: user.orgName
+                orgName: user.orgName,
+                registrationNo: user.registrationNo
             }
         });
     } catch (error) {

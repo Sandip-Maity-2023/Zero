@@ -28,6 +28,15 @@ app.use((req,res,next)=>{
 
 
 // //routes
+    app.get('/api/health', (req, res) => {
+        res.status(200).json({
+            status: 'ok',
+            service: 'ZeroHunger Backend API',
+            database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+            timestamp: new Date().toISOString()
+        })
+    })
+
     app.use('/auth', authRoutes)
     app.use('/api/workouts', requireAuth, workoutRoutes)
     // Volunteer Route

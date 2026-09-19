@@ -1,400 +1,273 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { API_URL } from '../../api';
 
 function AdminManage() {
-  // add org parts
+  const [adminJobs, setAdminJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [editingOrg, setEditingOrg] = useState(null);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
-  // States to Store Data
-  const [adminJobs, setAdminJobs] = useState(null);
-  const [updateAdmin, setUpdateAdmin] = useState(
-    {
-      _id: null,
-      // orgId:"",
-      // orgName:"",
-      // requestTitle:"",
-      // population:"",
-      // dueDate:"",
-      // orgOtherDetails:"",
-      // orgLocation:"",
-      // orgTelephone:"",
-      // donorId:"",
-      // donorName:"",
-      // donationSize:"",
-      // deliveryMethod:"",
-      // donorTelephone:"",
-      // donorOtherDetails:"",
-      // donorLocation:"",
-      // volunteerId:"",
-      // volunteerName:"",
-      // NIC:"",
-      // vehicleNo:"",
-      // volunteerTelephoneNo:"",
+  const [editForm, setEditForm] = useState({
+    organizationName: '',
+    regNo: '',
+    address: '',
+    telephoneNo: '',
+    email: ''
+  });
 
-      firstName: "",
-      lastName: "",
-      adminOrganizationName: "",
-      adminRegNo: "",
-      adminEmail: "",
-      adminRole: "",
-      adminPassword: "",
-      adminOrgOrganizationName: "",
-      adminOrgRegNo: "",
-      adminOrgEmail: "",
-      adminOrgRole: "",
-      adminOrgPassword: ""
+  const fetchAdminJobs = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${API_URL}/admin/approves`);
+      setAdminJobs(response.data || []);
+    } catch (err) {
+      console.error('Error fetching admin jobs:', err);
+    } finally {
+      setLoading(false);
     }
-  );
+  };
 
-  // const adminId = "sampleAdminID";
-
-
-  //UseEffect
   useEffect(() => {
     fetchAdminJobs();
   }, []);
 
-  // Function to fetch Admin Jobs of a Single Volunteer
-  const fetchAdminJobs = async () => {
-    try {
-      //Fetch Delivery Requests
-      //const response = await axios.get(`http://localhost:4001/admin/approves/`);
-      const response=await axios.get(`${process.env.APP_URL}/admin/approves/`);
-      // const response = await axios.get(`http://localhost:4001/admin/approves/${adminId}`);
-
-      //Set to State
-      setAdminJobs(response.data);
-    } catch (error) {
-
-    }
-
-  }
-
-  //Toggle Decline Admin
-  const toggleDeclineAdmin = async (adminJob) => {
-
-    const deleteId = adminJob._id;
-
-    //Delete Related Donor Record
-    //const deleteResponse = await axios.delete(`http://localhost:4001/admin/approves/${deleteId}`);
-    const deleteResponse=await axios.delete(`${process.env.APP_URL}/admin/approves/${deleteId}`);
-
-    console.log(deleteResponse);
-
-    if (deleteResponse) {
-
-      const repostAdmin = {
-        orgId: adminJob.orgId,
-        orgName: adminJob.orgName,
-        requestTitle: adminJob.requestTitle,
-        population: adminJob.population,
-        dueDate: adminJob.dueDate,
-        orgOtherDetails: adminJob.orgOtherDetails,
-        orgLocation: adminJob.orgLocation,
-        orgTelephone: adminJob.orgTelephone,
-        donorId: adminJob.donorId,
-        donorName: adminJob.donorName,
-        donationSize: adminJob.donationSize,
-        deliveryMethod: adminJob.deliveryMethod,
-        donorTelephone: adminJob.donorTelephone,
-        donorOtherDetails: adminJob.donorOtherDetails,
-        donorLocation: adminJob.donorLocation,
-
-        firstName: adminJob.firstName,
-        lastName: adminJob.lastName,
-        adminOrganizationName: adminJob.adminOrganizationName,
-        adminRegNo: adminJob.adminRegNo,
-        adminEmail: adminJob.adminEmail,
-        adminRole: adminJob.adminRole,
-        adminPassword: adminJob.adminPassword,
-        adminOrgOrganizationName: adminJob.adminOrgOrganizationName,
-        adminOrgRegNo: adminJob.adminOrgRegNo,
-        adminOrgEmail: adminJob.adminOrgEmail,
-        adminOrgRole: adminJob.adminOrgRole,
-        adminOrgPassword: adminJob.adminOrgPassword
-
-
-      }
-
-      //Send the create request
-      try {
-       // const response = await axios.post("http://localhost:4001/admin/approves/", repostAdmin);
-        const response=await axios.post(`${process.env.APP_URL}/admin/approves/`,repostAdmin);
-
-        console.log(response);
-      } catch (error) {
-
-      }
-
-
-    }
-
-    //Update the Admin Jobs List
-    fetchAdminJobs();
-
-  };
-
-  //Toggle Edit Delivery
-  const toggleUpdateAdmin = (adminJob) => {
-
-    setUpdateAdmin({
-      _id: adminJob._id,
-      orgId: adminJob.orgId,
-      orgName: adminJob.orgName,
-      requestTitle: adminJob.requestTitle,
-      population: adminJob.population,
-      dueDate: adminJob.duedate,
-      orgOtherDetails: adminJob.orgOtherDetails,
-      orgLocation: adminJob.orgLocation,
-      orgTelephone: adminJob.orgTelephone,
-      donorId: adminJob.donorId,
-      donorName: adminJob.donorName,
-      donationSize: adminJob.donationSize,
-      deliveryMethod: adminJob.deliveryMethod,
-      donorTelephone: adminJob.donorTelephone,
-      donorOtherDetails: adminJob.donorOtherDetails,
-      donorLocation: adminJob.donorLocation,
-      volunteerId: adminJob.volunteerId,
-      volunteerName: adminJob.volunteerName,
-      NIC: adminJob.NIC,
-      vehicleNo: adminJob.vehicleNo,
-      volunteerTelephoneNo: adminJob.volunteerTelephoneNo,
-
-      firstName: adminJob.firstName,
-      lastName: adminJob.lastName,
-      adminOrganizationName: adminJob.adminOrganizationName,
-      adminRegNo: adminJob.adminRegNo,
-      adminEmail: adminJob.adminEmail,
-      adminRole: adminJob.adminRole,
-      adminPassword: adminJob.adminPassword,
-      adminOrgOrganizationName: adminJob.adminOrgOrganizationName,
-      adminOrgRegNo: adminJob.adminOrgRegNo,
-      adminOrgEmail: adminJob.adminOrgEmail,
-      adminOrgRole: adminJob.adminOrgRole,
-      adminOrgPassword: adminJob.adminOrgPassword
-
-    })
-  };
-
-  //Handle Update Field Change
-  const handleUpdateFieldChange = (e) => {
-    const { value, name } = e.target
-
-    setUpdateAdmin({
-      ...updateAdmin,
-      [name]: value,
-    })
-    console.log(updateAdmin);
-
-  };
-
-  // Update Admin
-  const updateAdminJob = async (e) => {
-    e.preventDefault();
-
-    const adminJobUpdateDetails = {
-      orgId: updateAdmin.orgId,
-      orgName: updateAdmin.orgName,
-      requestTitle: updateAdmin.requestTitle,
-      population: updateAdmin.population,
-      dueDate: updateAdmin.duedate,
-      orgOtherDetails: updateAdmin.orgOtherDetails,
-      orgLocation: updateAdmin.orgLocation,
-      orgTelephone: updateAdmin.orgTelephone,
-      donorId: updateAdmin.donorId,
-      donorName: updateAdmin.donorName,
-      donationSize: updateAdmin.donationSize,
-      deliveryMethod: updateAdmin.deliveryMethod,
-      donorTelephone: updateAdmin.donorTelephone,
-      donorOtherDetails: updateAdmin.donorOtherDetails,
-      donorLocation: updateAdmin.donorLocation,
-      volunteerId: updateAdmin.volunteerId,
-      volunteerName: updateAdmin.volunteerName,
-      NIC: updateAdmin.NIC,
-      vehicleNo: updateAdmin.vehicleNo,
-      volunteerTelephoneNo: updateAdmin.volunteerTelephoneNo,
-
-      firstName: updateAdmin.firstName,
-      lastName: updateAdmin.lastName,
-      adminOrganizationName: updateAdmin.adminOrganizationName,
-      adminRegNo: updateAdmin.adminRegNo,
-      adminEmail: updateAdmin.adminEmail,
-      adminRole: updateAdmin.adminRole,
-      adminPassword: updateAdmin.adminPassword,
-      adminOrgOrganizationName: updateAdmin.adminOrgOrganizationName,
-      adminOrgRegNo: updateAdmin.adminOrgRegNo,
-      adminOrgEmail: updateAdmin.adminOrgEmail,
-      adminOrgRole: updateAdmin.adminOrgRole,
-      adminOrgPassword: updateAdmin.adminOrgPassword
-    };
-
-    //Send the update request
-   // const response = await axios.patch(`http://localhost:4001/admin/approves/${updateAdmin._id}`, adminJobUpdateDetails);
-    const response =await axios.patch(`${process.env.APP_URL}/admin/approves/${updateAdmin._id}`,adminJobUpdateDetails);
-    console.log(response);
-
-    //Update the Admin Jobs List
-    fetchAdminJobs();
-
-    //Update the updateAdmin State
-    setUpdateAdmin({
-      _id: null,
-      orgId: "",
-      orgName: "",
-      requestTitle: "",
-      population: "",
-      dueDate: "",
-      orgOtherDetails: "",
-      orgLocation: "",
-      orgTelephone: "",
-      donorId: "",
-      donorName: "",
-      donationSize: "",
-      deliveryMethod: "",
-      donorTelephone: "",
-      donorOtherDetails: "",
-      donorLocation: "",
-      volunteerId: "",
-      volunteerName: "",
-      NIC: "",
-      vehicleNo: "",
-      volunteerTelephoneNo: "",
-
-      firstName: "",
-      lastName: "",
-      adminOrganizationName: "",
-      adminRegNo: "",
-      adminEmail: "",
-      adminRole: "",
-      adminPassword: "",
-      adminOrgOrganizationName: "",
-      adminOrgRegNo: "",
-      adminOrgEmail: "",
-      adminOrgRole: "",
-      adminOrgPassword: ""
+  const handleStartEdit = (item) => {
+    setEditingOrg(item);
+    setEditForm({
+      organizationName: item.organizationName || '',
+      regNo: item.regNo || '',
+      address: item.address || '',
+      telephoneNo: item.telephoneNo || '',
+      email: item.email || ''
     });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if (!editingOrg) return;
+
+    try {
+      await axios.patch(`${API_URL}/admin/approves/${editingOrg._id}`, {
+        organizationName: editForm.organizationName,
+        regNo: editForm.regNo,
+        address: editForm.address,
+        telephoneNo: Number(editForm.telephoneNo),
+        email: editForm.email
+      });
+
+      setMessage(`Organization details updated for "${editForm.organizationName}".`);
+      setTimeout(() => setMessage(''), 4000);
+      setEditingOrg(null);
+      fetchAdminJobs();
+    } catch (err) {
+      setError('Failed to update organization details.');
+    }
+  };
+
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`Are you sure you want to delete ${name}?`)) return;
+
+    try {
+      await axios.delete(`${API_URL}/admin/approves/${id}`);
+      setMessage(`Deleted ${name}.`);
+      setTimeout(() => setMessage(''), 3000);
+      fetchAdminJobs();
+    } catch (err) {
+      setError('Failed to delete organization.');
+    }
   };
 
   return (
-    <div className="home">
-      <div className="workouts">
-        {adminJobs && adminJobs.map(adminJob => (
-          <div className="workout-details" key={adminJob._id}>
-            <h4>{adminJob.requestTitle}</h4>
-
-            <p><strong>Organization Name : </strong>{adminJob.adminOrganizationName}</p>
-            <p><strong>Reg No : </strong>{adminJob.adminRegNo}</p>
-            <p><strong>Email : </strong>{adminJob.adminEmail}</p>
-            {/* <p><strong>Organization Name : </strong>{adminJob.orgName}</p>
-                <p><strong>Organization Telephone No. : </strong>{adminJob.orgTelephone}</p>
-                <p><strong>Organization Location : </strong>{adminJob.orgLocation}</p>
-                <p><strong>Due Date : </strong>{adminJob.dueDate}</p>
-                
-                <p><strong>Donor Name : </strong>{adminJob.donorName}</p>
-                <p><strong>Donor Telephone No. : </strong>{adminJob.donorTelephone}</p>
-                <p><strong>Donor Location : </strong>{adminJob.donorLocation}</p>
-                <p><strong>Delivery Size : </strong>{adminJob.donationSize}</p>
-                <p><strong>Extra Details : </strong>{adminJob.donorOtherDetails}</p>
-                <hr/>
-                <p><strong>Volunteer Name : </strong>{adminJob.volunteerName}</p>
-                <p><strong>Volunteer NIC : </strong>{adminJob.NIC}</p>
-                <p><strong>Volunteer Vehicle No. : </strong>{adminJob.vehicleNo}</p>
-                <p><strong>Volunteer Telephone No. : </strong>{adminJob.volunteerTelephoneNo}</p> */}
-
-
-            <span>
-              <div><button onClick={() => toggleDeclineAdmin(adminJob)}>Decline Admin</button></div>
-              <div><button onClick={() => toggleUpdateAdmin(adminJob)}>Edit Adnin</button></div>
-              {/* onClick={() =>toggleAcceptAdmin(adninRequest)} */}
-            </span>
-          </div>
-        ))}
-
+    <div>
+      <div className="page-header page-header-flex">
+        <div>
+          <h2 id="page-title">Admin Organization Management</h2>
+          <p className="page-subtitle">Maintain accredited partner organizations, update contact lines, or revoke access.</p>
+        </div>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <Link to="/admin-home" className="btn btn-secondary">
+            ← Dashboard
+          </Link>
+          <Link to="/admin-accept" className="btn btn-primary">
+            + Verify New Org
+          </Link>
+        </div>
       </div>
 
-      <form className="create" onSubmit={updateAdminJob}>
-        <h3>Edit a Admin Job</h3>
-        <h4> {updateAdmin.requestTitle} </h4>
+      {message && (
+        <div className="alert-success">
+          <span>✅</span> {message}
+        </div>
+      )}
 
+      {error && (
+        <div className="alert-error">
+          <span>⚠️</span> {error}
+        </div>
+      )}
 
-        {/* <label>Volunter Name:</label>
-            <input 
-              type="text" 
-              name="volunteerName"
-              onChange={handleUpdateFieldChange}
-              value={updateAdmin.volunteerName}
-            />
+      {editingOrg && (
+        <div
+          style={{
+            background: '#ffffff',
+            padding: '24px',
+            borderRadius: '16px',
+            border: '2px solid #059669',
+            marginBottom: '32px',
+            boxShadow: '0 10px 20px rgba(0,0,0,0.06)'
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: '700' }}>
+              Edit Organization: {editingOrg.organizationName}
+            </h3>
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={() => setEditingOrg(null)}
+            >
+              ✕ Cancel
+            </button>
+          </div>
 
-            <label>NIC No:</label>
-            <input 
-              type="text" 
-              name="NIC"
-              onChange={handleUpdateFieldChange}
-              value={updateAdmin.NIC}
-            />
+          <form onSubmit={handleUpdate}>
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="edit_orgName">Organization Name</label>
+                <input
+                  type="text"
+                  id="edit_orgName"
+                  value={editForm.organizationName}
+                  onChange={(e) => setEditForm({ ...editForm, organizationName: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="edit_regNo">Registration / Charity No</label>
+                <input
+                  type="text"
+                  id="edit_regNo"
+                  value={editForm.regNo}
+                  onChange={(e) => setEditForm({ ...editForm, regNo: e.target.value })}
+                  required
+                />
+              </div>
+            </div>
 
-            <label>Vehicle No:</label>
-            <input 
-              type="text" 
-              name="vehicleNo"
-              onChange={handleUpdateFieldChange}
-              value={updateAdmin.vehicleNo}
-            />
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="edit_email">Email Address</label>
+                <input
+                  type="email"
+                  id="edit_email"
+                  value={editForm.email}
+                  onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="edit_phone">Telephone</label>
+                <input
+                  type="tel"
+                  id="edit_phone"
+                  value={editForm.telephoneNo}
+                  onChange={(e) => setEditForm({ ...editForm, telephoneNo: e.target.value })}
+                  required
+                />
+              </div>
+            </div>
 
-            <label>Telephone No:</label>
-            <input 
-              type="number" 
-              name="volunteerTelephoneNo"
-              onChange={handleUpdateFieldChange}
-              value={updateAdmin.volunteerTelephoneNo}
-            />
+            <div className="form-group">
+              <label htmlFor="edit_address">Address</label>
+              <input
+                type="text"
+                id="edit_address"
+                value={editForm.address}
+                onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
+                required
+              />
+            </div>
 
-      <button>Update Delivery Job</button>
-    </form> */}
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button type="submit" className="btn btn-primary">
+                Save Changes
+              </button>
+              <button type="button" className="btn btn-secondary" onClick={() => setEditingOrg(null)}>
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
-        <label>Organization Name:</label>
-        <input
-          type="text"
-          name="adminOrgName"
-          onChange={handleUpdateFieldChange}
-          value={updateAdmin.adminOrgName}
-        />
+      {loading ? (
+        <div style={{ textAlign: 'center', padding: '50px', color: '#64748b' }}>
+          Loading organization records...
+        </div>
+      ) : adminJobs.length === 0 ? (
+        <div className="empty-state">
+          <h3>No Organization Records Found</h3>
+          <p>Register or verify an organization to start managing records.</p>
+          <Link to="/admin-accept" className="btn btn-primary">
+            Verify Organization
+          </Link>
+        </div>
+      ) : (
+        <div className="card-grid">
+          {adminJobs.map((item) => (
+            <div className="item-card" key={item._id}>
+              <div>
+                <div className="card-top-row">
+                  <h4>{item.organizationName}</h4>
+                  <span className="role-badge admin">Active</span>
+                </div>
 
-        <label>Registration No:</label>
-        <input
-          type="text"
-          name="adminRegno"
-          onChange={handleUpdateFieldChange}
-          value={updateAdmin.adminRegNo}
-        />
+                <div style={{ margin: '12px 0' }}>
+                  <div className="card-detail-item">
+                    <strong>Reg No:</strong>
+                    <span>{item.regNo}</span>
+                  </div>
+                  <div className="card-detail-item">
+                    <strong>Email:</strong>
+                    <span>{item.email}</span>
+                  </div>
+                  <div className="card-detail-item">
+                    <strong>Phone:</strong>
+                    <span>{item.telephoneNo}</span>
+                  </div>
+                  <div className="card-detail-item">
+                    <strong>Address:</strong>
+                    <span>{item.address}</span>
+                  </div>
+                </div>
+              </div>
 
-        <label>Email Address:</label>
-        <input
-          type="text"
-          name="adminEmail"
-          onChange={handleUpdateFieldChange}
-          value={updateAdmin.adminEmail}
-        />
-
-        <label>Role:</label>
-        <input
-          type="text"
-          name="adminRole"
-          onChange={handleUpdateFieldChange}
-          value={updateAdmin.adminRole}
-        />
-
-        <label>Password:</label>
-        <input
-          type="text"
-          name="adminPassword"
-          onChange={handleUpdateFieldChange}
-          value={updateAdmin.adminPassword}
-        />
-
-        <button>Update Organization</button>
-      </form>
+              <div className="card-actions">
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => handleStartEdit(item)}
+                >
+                  Edit Roster Info
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger btn-sm"
+                  onClick={() => handleDelete(item._id, item.organizationName)}
+                >
+                  Revoke
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
-  )
+  );
 }
 
 export default AdminManage;

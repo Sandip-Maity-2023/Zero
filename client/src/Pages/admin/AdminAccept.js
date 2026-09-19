@@ -1,307 +1,291 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { API_URL } from '../../api';
 
 function AdminAccept() {
-
-
-  //Get All Unreigsted Organizations from DB and Display them
-  //#1 - Create a function to fetch Unreigsted Organizations
-  //#2 - Set the Unreigsted Organizations into a State
-  //#3 - Create a UseEffect to Update Page everytime Refreshed
-  //#4 - Create the Container for Unreigsted Organizations
-  // add org parts
-
-
-  //States to Store Data
-  const [unreOrgs, setUnregOrgs] = useState([]);
   const [adminJobs, setAdminJobs] = useState([]);
-  const [unregOrgsAccept, setUnregOrgsAccept] = useState({
-    _id: null,
-    adminOrganizationName: "",
-    adminRegNo: "",
-    adminEmail: "",
-    adminRole: "",
-    adminPassword: "",
-    adminOrgOrganizationName: "",
-    adminOrgRegNo: "",
-    adminOrgEmail: "",
-    adminOrgRole: "",
-    adminOrgPassword: ""
-  }
-  );
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
-  //useEffect
-  useEffect(() => {
-    fetchUnregOrgs();
-  }, []);
+  const [newOrg, setNewOrg] = useState({
+    organizationName: '',
+    regNo: '',
+    address: '',
+    telephoneNo: '',
+    email: '',
+    password: '',
+    confirmPw: ''
+  });
 
-  useEffect(() => {
-    console.log(unregOrgsAccept);
-  }, [unregOrgsAccept]);
-
-  //Function to Fetch Delivery Requests
-  const fetchUnregOrgs = async () => {
-
-    //Fetch Delivery Requests
+  const fetchAdminJobs = async () => {
+    setLoading(true);
     try {
-      //const response = await axios.get("http://localhost:4000/adminOrgs/accepts/");
-      const response=await axios.get(`${process.env.APP_URL}/adminOrgs/accepts`);
-
-
-      //Set to State
-      setUnregOrgs(response.data);
-    } catch (error) {
-
+      const response = await axios.get(`${API_URL}/admin/approves`);
+      setAdminJobs(response.data || []);
+    } catch (err) {
+      console.error('Error fetching admin approvals:', err);
+    } finally {
+      setLoading(false);
     }
-
   };
 
-
-  //
-
-  //UseEffect
   useEffect(() => {
     fetchAdminJobs();
   }, []);
 
-  // Function to fetch Admin Jobs of a Single Volunteer
-  const fetchAdminJobs = async () => {
-    try {
+  const handleChange = (e) => {
+    setNewOrg({ ...newOrg, [e.target.name]: e.target.value });
+  };
 
-      //Fetch Delivery Requests
-     // const response = await axios.get(`http://localhost:4000/admins/approves/`);
-      const response=await axios.get(`${process.env.APP_URL}/admins/approves/`);
-      // const response = await axios.get(`http://localhost:4000/admins/approves/${adminId}`);
-
-      //Set to State
-      setAdminJobs(response.data);
-    } catch (error) {
-
-    }
-  }
-
-  //
-
-
-  //Toggle Accept Delivery
-  const toggleAcceptUnregOrgs = async (unreOrgs) => {
-    const adminOrg = {
-      _id: unreOrgs._id,
-      adminOrganizationName: unreOrgs.adminOrgOrganizationName,
-      adminRegNo: unreOrgs.adminOrgRegNo,
-      adminEmail: unreOrgs.adminOrgEmail,
-      adminRole: unreOrgs.adminOrgRole,
-      adminPassword: unreOrgs.adminOrgPassword
-    }
-    try {
-      //Send the create request
-      //const response = await axios.post("http://localhost:4000/admins/approves/", adminOrg);
-      const response =await axios.post(`${process.env.APP_URL}/admins/approves/`,adminOrg);
-
-      console.log(response);
-
-      //Delete Related Donor Record
-      //const deleteResponse = await axios.delete(`http://localhost:4000/adminOrgs/accepts/${unreOrgs._id}`);
-      const deleteResponse=await axios.delete(`${process.env.APP_URL}/adminOrgs/accepts/${unreOrgs._id}`);
-
-      console.log(deleteResponse);
-      window.location.reload();
-    } catch (error) {
-
-    }
-
-  }
-
-  //Toggle Accept Delivery
-  const toggleRejectUnregOrgs = async (unreOrgs) => {
-    //const deleteResponse = await axios.delete(`http://localhost:4000/adminOrgs/accepts/${unreOrgs._id}`);
-    const deleteResponse=await axios.delete(`${process.env.APP_URL}/adminOrgs/accepts/${unreOrgs._id}`);
-
-    window.location.reload();
-  }
-
-  const toggleDeclineAdmin = async (adminJob) => {
-    //const deleteResponse = await axios.delete(`http://localhost:4000/admins/approves/${adminJob._id}`);
-    const deleteResponse=await axios.delete(`${process.env.APP_URL}/admins/approves/${adminJob}._id`);
-
-    window.location.reload();
-  }
-
-  const toggleUpdateAdmin = (unreOrgs) => {
-    setUnregOrgsAccept({
-      _id: unreOrgs._id,
-      adminOrganizationName: unreOrgs.adminOrganizationName,
-      adminRegNo: unreOrgs.adminRegNo,
-      adminEmail: unreOrgs.adminEmail,
-      adminRole: unreOrgs.adminRole,
-      adminPassword: unreOrgs.adminPassword
-    });
-  }
-
-  //Handle Update Field Change
-  const handleAddFieldChange = (e) => {
-    const { value, name } = e.target
-
-    setUnregOrgsAccept({
-      ...unregOrgsAccept,
-      [name]: value,
-    })
-    console.log(unregOrgsAccept);
-  }
-
-  // Create Delivery Job
-  const createAdminOrgJob = async (e) => {
+  const handleCreateApprove = async (e) => {
     e.preventDefault();
-
-    if (unregOrgsAccept._id) {
-      const adminOrgJobDetails = {
-        _id: unregOrgsAccept._id,
-        adminOrganizationName: unregOrgsAccept.adminOrganizationName,
-        adminRegNo: unregOrgsAccept.adminRegNo,
-        adminEmail: unregOrgsAccept.adminEmail,
-        adminRole: unregOrgsAccept.adminRole,
-        adminPassword: unregOrgsAccept.adminPassword
-      };
-      try {
-
-       // const response = await axios.patch(`http://localhost:4000/admins/approves/${unregOrgsAccept._id}`, adminOrgJobDetails);
-        const response=await axios.patch(`${process.env.APP_URL}/admins/approves/${unregOrgsAccept._id}`,adminOrgJobDetails);
-
-      } catch (error) {
-
-      }
-
-    } else {
-      const adminOrgJobDetails = {
-        adminOrgOrganizationName: unregOrgsAccept.adminOrganizationName,
-        adminOrgRegNo: unregOrgsAccept.adminRegNo,
-        adminOrgEmail: unregOrgsAccept.adminEmail,
-        adminOrgRole: "ORG",
-        adminOrgPassword: unregOrgsAccept.adminPassword
-      };
-      try {
-
-        //const response = await axios.post("http://localhost:4000/adminOrgs/accepts/", adminOrgJobDetails);
-        const response =await axios.post(`${process.env.APP_URL}/adminOrgs/accepts/`,adminOrgJobDetails);
-      } catch (error) {
-
-      }
+    if (newOrg.password !== newOrg.confirmPw) {
+      setError('Passwords do not match');
+      return;
     }
 
-    //Refresh Delivery Requests List
-    await fetchUnregOrgs();
+    try {
+      await axios.post(`${API_URL}/admin/approves`, {
+        ...newOrg,
+        telephoneNo: Number(newOrg.telephoneNo)
+      });
+      setMessage(`Organization "${newOrg.organizationName}" approved and registered!`);
+      setTimeout(() => setMessage(''), 4000);
+      setNewOrg({
+        organizationName: '',
+        regNo: '',
+        address: '',
+        telephoneNo: '',
+        email: '',
+        password: '',
+        confirmPw: ''
+      });
+      fetchAdminJobs();
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to approve organization.');
+    }
+  };
 
-    await fetchAdminJobs();
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`Delete approval record for ${name}?`)) return;
 
-    //Clear Details From State
-    setUnregOrgsAccept({
-      _id: null,
-      adminOrganizationName: "",
-      adminRegNo: "",
-      adminEmail: "",
-      adminRole: "",
-      adminPassword: "",
-      adminOrgOrganizationName: "",
-      adminOrgRegNo: "",
-      adminOrgEmail: "",
-      adminOrgRole: "",
-      adminOrgPassword: ""
-    });
-
-  }
+    try {
+      await axios.delete(`${API_URL}/admin/approves/${id}`);
+      setMessage(`Record removed.`);
+      setTimeout(() => setMessage(''), 3000);
+      fetchAdminJobs();
+    } catch (err) {
+      setError('Failed to delete record.');
+    }
+  };
 
   return (
-    <div className="home">
-      <div className="workouts">
-        <h1>Unreigsted Organizations</h1>
-        {/* {
-          JSON.stringify(unreOrgs)
-        } */}
-        {unreOrgs && unreOrgs.map(unreOrg => {
-          return (
-            <div className="workout-details" key={unreOrg._id}>
-
-              <h2><strong></strong>{unreOrg.adminOrgOrganizationName}</h2>
-              <p><strong>Reg No : </strong>{unreOrg.adminOrgRegNo}</p>
-              <p><strong>Email</strong>{unreOrg.adminOrgEmail}</p>
-              <p><strong>Role :</strong>{unreOrg.adminOrgRole}</p>
-              <span>
-
-                <div><button onClick={async () => await toggleAcceptUnregOrgs(unreOrg)}>Accept</button></div>
-                <div><button onClick={async () => await toggleRejectUnregOrgs(unreOrg)}>Reject</button></div>
-
-              </span>
-            </div>
-          );
-        })}
-
-        <h1>Registed Organizations</h1>
-        {adminJobs && adminJobs.map(adminJob => (
-          <div className="workout-details" key={adminJob._id}>
-
-            <h2><strong></strong>{adminJob.adminOrganizationName}</h2>
-
-            <p><strong>Reg No : </strong>{adminJob.adminRegNo}</p>
-            <p><strong>Email : </strong>{adminJob.adminEmail}</p>
-            <p><strong>Role :</strong>{adminJob.adminRole}</p>
-
-            <span>
-              <div><button onClick={async () => await toggleDeclineAdmin(adminJob)}>Decline</button></div>
-              <div><button onClick={() => toggleUpdateAdmin(adminJob)}>Edit</button></div>
-              {/* onClick={() =>toggleAcceptAdmin(adninRequest)} */}
-            </span>
-          </div>
-        ))}
-
-
-
+    <div>
+      <div className="page-header page-header-flex">
+        <div>
+          <h2 id="page-title">Organization Approvals Queue</h2>
+          <p className="page-subtitle">Verify legitimacy of applying organizations and issue verified partner credentials.</p>
+        </div>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <Link to="/admin-home" className="btn btn-secondary">
+            ← Dashboard
+          </Link>
+          <Link to="/admin-mgmt" className="btn btn-primary">
+            Admin Management →
+          </Link>
+        </div>
       </div>
 
+      {message && (
+        <div className="alert-success">
+          <span>✅</span> {message}
+        </div>
+      )}
 
-      <form className="create" onSubmit={createAdminOrgJob}>
-        <h1>Add/Edit Organization</h1>
-        <h4>{unregOrgsAccept.requestTitle} </h4>
+      {error && (
+        <div className="alert-error">
+          <span>⚠️</span> {error}
+        </div>
+      )}
 
-        <label>Organization Name:</label>
-        <input
-          type="text"
-          name="adminOrganizationName"
-          onChange={handleAddFieldChange}
-          value={unregOrgsAccept.adminOrganizationName}
-        />
+      <div className="home-split">
+        {/* Approved / Pending List */}
+        <div>
+          <h3 style={{ fontSize: '1.2rem', fontWeight: '700', marginBottom: '16px' }}>
+            Verified Organization Directory ({adminJobs.length})
+          </h3>
 
-        <label>Registration No:</label>
-        <input
-          type="text"
-          name="adminRegNo"
-          onChange={handleAddFieldChange}
-          value={unregOrgsAccept.adminRegNo}
-        />
+          {loading ? (
+            <p style={{ color: '#64748b' }}>Loading directory...</p>
+          ) : adminJobs.length === 0 ? (
+            <div className="empty-state">
+              <h3>No Organizations in Directory</h3>
+              <p>Approve or register an organization using the verification form.</p>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {adminJobs.map((item) => (
+                <div className="item-card" key={item._id}>
+                  <div className="card-top-row">
+                    <h4>{item.organizationName}</h4>
+                    <span className="role-badge admin">Approved</span>
+                  </div>
 
-        <label>Email Address:</label>
-        <input
-          type="text"
-          name="adminEmail"
-          onChange={handleAddFieldChange}
-          value={unregOrgsAccept.adminEmail}
-        />
+                  <div style={{ margin: '10px 0' }}>
+                    <div className="card-detail-item">
+                      <strong>Registration No:</strong>
+                      <span>{item.regNo}</span>
+                    </div>
+                    <div className="card-detail-item">
+                      <strong>Email:</strong>
+                      <span>{item.email}</span>
+                    </div>
+                    <div className="card-detail-item">
+                      <strong>Telephone:</strong>
+                      <span>{item.telephoneNo}</span>
+                    </div>
+                    <div className="card-detail-item">
+                      <strong>Address:</strong>
+                      <span>{item.address}</span>
+                    </div>
+                  </div>
 
-        
-        <label>Password:</label>
-        <input
-          type="text"
-          name="adminPassword"
-          onChange={handleAddFieldChange}
-          value={unregOrgsAccept.adminPassword}
-        />
+                  <div className="card-actions">
+                    <button
+                      type="button"
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleDelete(item._id, item.organizationName)}
+                    >
+                      Remove Verification
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
-        <button>Add Organization</button>
-        <button>Update Organization</button>
-      </form>
+        {/* Verification / Manual Approval Form */}
+        <div
+          style={{
+            background: '#ffffff',
+            padding: '28px',
+            borderRadius: '16px',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)',
+            position: 'sticky',
+            top: '90px'
+          }}
+        >
+          <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '8px' }}>
+            🛡️ Verify & Register Org
+          </h3>
+          <p style={{ fontSize: '0.88rem', color: '#64748b', marginBottom: '20px' }}>
+            Enter organization legal details to add to the verified roster.
+          </p>
 
+          <form onSubmit={handleCreateApprove}>
+            <div className="form-group">
+              <label htmlFor="organizationName">Organization Name</label>
+              <input
+                type="text"
+                id="organizationName"
+                name="organizationName"
+                value={newOrg.organizationName}
+                onChange={handleChange}
+                placeholder="e.g. City Food Bank"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="regNo">Official Reg / Tax ID</label>
+              <input
+                type="text"
+                id="regNo"
+                name="regNo"
+                value={newOrg.regNo}
+                onChange={handleChange}
+                placeholder="e.g. NGO-4491"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="email">Official Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={newOrg.email}
+                onChange={handleChange}
+                placeholder="info@foodbank.org"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="telephoneNo">Contact Phone</label>
+              <input
+                type="tel"
+                id="telephoneNo"
+                name="telephoneNo"
+                value={newOrg.telephoneNo}
+                onChange={handleChange}
+                placeholder="e.g. 9876543210"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="address">Official Address</label>
+              <input
+                type="text"
+                id="address"
+                name="address"
+                value={newOrg.address}
+                onChange={handleChange}
+                placeholder="e.g. 100 Main Road, Suite 2"
+                required
+              />
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="password">Assigned Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={newOrg.password}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="confirmPw">Confirm Password</label>
+                <input
+                  type="password"
+                  id="confirmPw"
+                  name="confirmPw"
+                  value={newOrg.confirmPw}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <button type="submit" className="btn btn-primary btn-full" style={{ marginTop: '12px' }}>
+              Confirm Verification
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
-  )
-
+  );
 }
 
 export default AdminAccept;

@@ -1,82 +1,158 @@
-import {BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './Components/ProtectedRoute';
 
-//pages and componenets
+// Layout & Components
 import Navbar from './Components/Navbar';
-//import Home from './Pages/Home';
-//import Happy from './Pages/Happy';
+
+// Landing & Auth Pages
 import LandingPage from './Pages/Landing Pages/LandingPage';
-import Login from './Pages/Landing Pages/LoginPage'
-import Signup from './Pages/Landing Pages/SignUpPage'
+import Login from './Pages/Landing Pages/LoginPage';
+import Signup from './Pages/Landing Pages/SignUpPage';
+
+// Volunteer Pages
+import VolunteerHome from './Pages/Volunteer/VolunteerHomePage';
 import VolunteerDeliveryAccept from './Pages/Volunteer/VolunteerDeliveryAccept';
 import VolunteerMgmt from './Pages/Volunteer/VolunteerMgmt';
-import VolunteerHome from './Pages/Volunteer/VolunteerHomePage'
+
+// Organization Pages
+import OrganizationHome from './Pages/Organization/OrganizationHomePage';
 import FoodAidRequest from './Pages/Organization/FoodAidRequestPage';
 import OrganizationMgmt from './Pages/Organization/OrganizationMgmtPage';
-import OrganizationHome from './Pages/Organization/OrganizationHomePage';
-import DonorAcceptRequest from './Pages/Donor/DonorAcceptRequestPage';
-import DonorMgmt from './Pages/Donor/DonorHomePage';
+
+// Donor Pages
 import DonorHome from './Pages/Donor/DonorHomePage';
-// import FoodAidRequest from './Pages/Organization/FoodAidRequestPage';
+import DonorAcceptRequest from './Pages/Donor/DonorAcceptRequestPage';
+
+// Admin Pages
+import AdminHome from './Pages/admin/AdminHomePage';
+import AdminAccept from './Pages/admin/AdminAccept';
+import AdminManage from './Pages/admin/AdminManage';
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Navbar/>
-        <div className='pages'>
+    <AuthProvider>
+      <div className="App">
+        <BrowserRouter>
+          <Navbar />
+          <div className="pages">
             <Routes>
-                <Route
-                  path="/"
-                  element={<LandingPage/>}
-                />
-                <Route
-                  path="/login"
-                  element={<Login/>}
-                />
-                <Route
-                  path="/signup"
-                  element={<Signup/>}
-                />
-                <Route
-                  path="/volunteer-delivery-accept"
-                  element={<VolunteerDeliveryAccept/>}
-                />
-                <Route
-                  path="/volunteer-mgmt"
-                  element={<VolunteerMgmt/>}
-                />
-                <Route
-                  path="/volunteer-home"
-                  element={<VolunteerHome/>}
-                />
-                <Route
-                  path="/foodaidrequest"
-                  element={<FoodAidRequest/>}
-                />
-                <Route
-                  path="/organization-mgmt"
-                  element={<OrganizationMgmt/>}
-                />
-                <Route
-                  path="/organization-home"
-                  element={<OrganizationHome/>}
-                />
-                <Route
-                  path="/donor-accept-request"
-                  element={<DonorAcceptRequest/>}
-                />
-                <Route
-                  path="/donor-mgmt"
-                  element={<DonorMgmt/>}
-                />
-                <Route
-                  path="/donor-home"
-                  element={<DonorHome/>}
-                />
+              {/* Public Routes */}
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+
+              {/* Organization Protected Routes */}
+              <Route
+                path="/organization-home"
+                element={
+                  <ProtectedRoute allowedRoles={['organization']}>
+                    <OrganizationHome />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/foodaidrequest"
+                element={
+                  <ProtectedRoute allowedRoles={['organization']}>
+                    <FoodAidRequest />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/organization-mgmt"
+                element={
+                  <ProtectedRoute allowedRoles={['organization']}>
+                    <OrganizationMgmt />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Volunteer Protected Routes */}
+              <Route
+                path="/volunteer-home"
+                element={
+                  <ProtectedRoute allowedRoles={['volunteer']}>
+                    <VolunteerHome />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/volunteer-delivery-accept"
+                element={
+                  <ProtectedRoute allowedRoles={['volunteer']}>
+                    <VolunteerDeliveryAccept />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/volunteer-mgmt"
+                element={
+                  <ProtectedRoute allowedRoles={['volunteer']}>
+                    <VolunteerMgmt />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Donor Protected Routes */}
+              <Route
+                path="/donor-home"
+                element={
+                  <ProtectedRoute allowedRoles={['donor']}>
+                    <DonorHome />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/donor-accept-request"
+                element={
+                  <ProtectedRoute allowedRoles={['donor']}>
+                    <DonorAcceptRequest />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/donor-mgmt"
+                element={
+                  <ProtectedRoute allowedRoles={['donor']}>
+                    <DonorHome />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Admin Protected Routes */}
+              <Route
+                path="/admin-home"
+                element={
+                  <ProtectedRoute allowedRoles={['admin']}>
+                    <AdminHome />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin-accept"
+                element={
+                  <ProtectedRoute allowedRoles={['admin']}>
+                    <AdminAccept />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin-mgmt"
+                element={
+                  <ProtectedRoute allowedRoles={['admin']}>
+                    <AdminManage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Fallback */}
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
-        </div>
-      </BrowserRouter>
-    </div>
+          </div>
+        </BrowserRouter>
+      </div>
+    </AuthProvider>
   );
 }
 

@@ -31,18 +31,35 @@ const getOrgJob = async (req, res) => {
 
 // create a new OrgJob
 const createOrgJob = async (req, res) => {
-    const { title, location, population, dudeDate, otherDetails, purchaseCount } = req.body
-//    console.log(req.body);
-    //add doc to db
+    const {
+        orgId,
+        orgName,
+        requestTitle,
+        population,
+        dueDate,
+        orgOtherDetails,
+        orgLocation,
+        orgTelephone
+    } = req.body
+
+    const finalOrgId = orgId || (req.user ? req.user._id.toString() : 'org-user');
+    const finalOrgName = orgName || (req.user ? (req.user.orgName || `${req.user.firstName || ''} ${req.user.lastName || ''}`.trim()) : 'Organization');
+
     try {
-        const newOrgAidRequest = await OrgAidRequest.create({ title, location, population, dudeDate, otherDetails, purchaseCount })
+        const newOrgAidRequest = await OrgAidRequest.create({
+            orgId: finalOrgId,
+            orgName: finalOrgName,
+            requestTitle,
+            population,
+            dueDate,
+            orgOtherDetails: orgOtherDetails || 'None',
+            orgLocation,
+            orgTelephone
+        })
         res.status(200).json(newOrgAidRequest)
     } catch (error) {
-        res.status(400).json({ error: error.message ,msg:"checking"})
+        res.status(400).json({ error: error.message })
     }
-
-
-
 }
 
 // delete a OrgJob
