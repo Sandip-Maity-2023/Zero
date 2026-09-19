@@ -92,8 +92,15 @@ function VolunteerDeliveryAccept() {
       // 1. Create the delivery job under volunteer deliveries
       await axios.post(`${API_URL}/volunteer/delivery-jobs`, payload);
 
-      // 2. Remove the claimed donation from the open donor pool
-      await axios.delete(`${API_URL}/donor/${selectedJob._id}`);
+      // 2. Mark donation as in-transit with courier details so donor can track it live
+      await axios.patch(`${API_URL}/donor/${selectedJob._id}`, {
+        status: 'in-transit',
+        volunteerId: user?._id || 'volunteer-user',
+        volunteerName: volunteerDetails.volunteerName,
+        NIC: volunteerDetails.NIC,
+        vehicleNo: volunteerDetails.vehicleNo,
+        volunteerTelephoneNo: Number(volunteerDetails.volunteerTelephoneNo)
+      });
 
       setMessage(
         `Successfully accepted delivery mission for "${selectedJob.requestTitle}"! Check "My Deliveries" to track pickup and dropoff details.`

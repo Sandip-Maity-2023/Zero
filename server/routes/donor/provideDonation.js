@@ -6,28 +6,29 @@ const {
     createProvideDonation,
     deleteProvideDonation,
     updateProvideDonation,
-    getDonorVolunteerDelivery
+    getDonorVolunteerDelivery,
+    getDonorDonations
 } = require('../../controller/donor/provideDonation')
 
+// Get all donations
+router.get('/', getProvideDonations)
 
-const suburl = "provideDonation"
-//Get all Org jobs
-router.get('/',getProvideDonations) 
+// Get all unassigned volunteer deliveries
+router.get('/volunteer-delivery', getDonorVolunteerDelivery)
 
-//Get all volunteer jobs
-router.get('/volunteer-delivery/',getDonorVolunteerDelivery)
+// Get donations by donor ID
+router.get('/user-donations/:donorId', getDonorDonations)
 
-//Get a single Org job
-router.get('/:id',getProvideDonation)
+// Get a single donation
+router.get('/:id', getProvideDonation)
 
-//POST a new Org job
+// POST a new donation
 router.post('/', createProvideDonation)
 
-//Delete a  Org job
+// Delete a donation
 router.delete('/:id', deleteProvideDonation)
 
-//Update a Org job
-router.patch('/:id',updateProvideDonation)
-
+// Update a donation
+router.patch('/:id', updateProvideDonation)
 
 module.exports = router;

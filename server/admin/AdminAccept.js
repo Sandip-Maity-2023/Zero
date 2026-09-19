@@ -43,7 +43,8 @@ function AdminAccept() {
 
     //Fetch Delivery Requests
     try {
-      const response = await axios.get("http://localhost:4000/adminOrgs/accepts/");
+      //  const response = await axios.get("http://localhost:4000/adminOrgs/accepts/");
+      const response = await axios.get(`${process.env.APP_URL}/adminOrgs/accepts/`);
 
       //Set to State
       setUnregOrgs(response.data);
@@ -66,7 +67,8 @@ function AdminAccept() {
     try {
 
       //Fetch Delivery Requests
-      const response = await axios.get(`http://localhost:4000/admins/approves/`);
+      //const response = await axios.get(`http://localhost:4000/admins/approves/`);
+      const response = await axios.get(`${process.env.APP_URL}/admins/approves/`);
       // const response = await axios.get(`http://localhost:4000/admins/approves/${adminId}`);
 
       //Set to State
@@ -91,11 +93,13 @@ function AdminAccept() {
     }
     try {
       //Send the create request
-      const response = await axios.post("http://localhost:4000/admins/approves/", adminOrg);
+      //const response = await axios.post("http://localhost:4000/admins/approves/", adminOrg);
+      const response = await axios.post(`${process.env.APP_URL}/admins/approves/`, adminOrg);
       console.log(response);
 
       //Delete Related Donor Record
-      const deleteResponse = await axios.delete(`http://localhost:4000/adminOrgs/accepts/${unreOrgs._id}`);
+      //const deleteResponse = await axios.delete(`http://localhost:4000/adminOrgs/accepts/${unreOrgs._id}`);
+      const deleteResponse = await axios.delete(`${process.env.APP_URL}/adminOrgs/accepts/${unreOrgs._id}`);
       console.log(deleteResponse);
       window.location.reload();
     } catch (error) {
@@ -106,13 +110,15 @@ function AdminAccept() {
 
   //Toggle Accept Delivery
   const toggleRejectUnregOrgs = async (unreOrgs) => {
-    const deleteResponse = await axios.delete(`http://localhost:4000/adminOrgs/accepts/${unreOrgs._id}`);
+    //const deleteResponse = await axios.delete(`http://localhost:4000/adminOrgs/accepts/${unreOrgs._id}`);
+    const deleteResponse = await axios.delete(`${process.env.APP_URL}/adminOrgs/accepts/${unreOrgs._id}`);
 
     window.location.reload();
   }
 
   const toggleDeclineAdmin = async (adminJob) => {
-    const deleteResponse = await axios.delete(`http://localhost:4000/admins/approves/${adminJob._id}`);
+    //const deleteResponse = await axios.delete(`http://localhost:4000/admins/approves/${adminJob._id}`);
+    const deleteResponse = await axios.delete(`${process.env.APP_URL}/admins/approves/${adminJob._id}`);
 
     window.location.reload();
   }
@@ -154,7 +160,8 @@ function AdminAccept() {
       };
       try {
 
-        const response = await axios.patch(`http://localhost:4000/admins/approves/${unregOrgsAccept._id}`, adminOrgJobDetails);
+        //const response = await axios.patch(`http://localhost:4000/admins/approves/${unregOrgsAccept._id}`, adminOrgJobDetails);
+        const response = await axios.patch(`${process.env.APP_URL}/admins/approves/${unregOrgsAccept._id}`, adminOrgJobDetails);
       } catch (error) {
 
       }
@@ -169,7 +176,10 @@ function AdminAccept() {
       };
       try {
 
-        const response = await axios.post("http://localhost:4000/adminOrgs/accepts/", adminOrgJobDetails);
+        //const response = await axios.post("http://localhost:4000/adminOrgs/accepts/", adminOrgJobDetails);
+        const response = await axios.post(`${process.env.APP_URL}/adminOrgs/accepts/`, adminOrgJobDetails);
+        console.log(response);
+
       } catch (error) {
 
       }
@@ -273,7 +283,7 @@ function AdminAccept() {
           value={unregOrgsAccept.adminEmail}
         />
 
-        
+
         <label>Password:</label>
         <input
           type="text"

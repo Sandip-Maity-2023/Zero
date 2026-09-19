@@ -98,6 +98,20 @@ const Login = () => {
           >
             Volunteer (testcheck)
           </button>
+          <button
+            type="button"
+            className="demo-chip-btn"
+            onClick={() => fillDemoAccount('org@demo.org', 'password123')}
+          >
+            Organization (Hope Shelter)
+          </button>
+          <button
+            type="button"
+            className="demo-chip-btn"
+            onClick={() => fillDemoAccount('donor@demo.com', 'password123')}
+          >
+            Donor (Sarah Jenkins)
+          </button>
         </div>
       </div>
     </div>

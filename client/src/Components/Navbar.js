@@ -89,7 +89,12 @@ const Navbar = () => {
                     </li>
                     <li>
                       <Link to="/donor-accept-request" className={`nav-link ${isActive('/donor-accept-request') ? 'active' : ''}`}>
-                        Aid Requests & Donate
+                        Donate Food
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/donor-mgmt" className={`nav-link ${isActive('/donor-mgmt') ? 'active' : ''}`}>
+                        My Donations
                       </Link>
                     </li>
                   </>

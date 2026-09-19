@@ -23,6 +23,7 @@ import OrganizationMgmt from './Pages/Organization/OrganizationMgmtPage';
 // Donor Pages
 import DonorHome from './Pages/Donor/DonorHomePage';
 import DonorAcceptRequest from './Pages/Donor/DonorAcceptRequestPage';
+import DonorMgmt from './Pages/Donor/DonorMgmtPage';
 
 // Admin Pages
 import AdminHome from './Pages/admin/AdminHomePage';
@@ -115,7 +116,7 @@ function App() {
                 path="/donor-mgmt"
                 element={
                   <ProtectedRoute allowedRoles={['donor']}>
-                    <DonorHome />
+                    <DonorMgmt />
                   </ProtectedRoute>
                 }
               />

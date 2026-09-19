@@ -1,4 +1,4 @@
-require('dotenv').config() 
+require('dotenv').config()
 
 const express = require('express')
 const mongoose = require('mongoose')
@@ -21,36 +21,36 @@ const PORT = process.env.PORT || 4000;
 app.use(express.json())
 app.use(cors())
 
-app.use((req,res,next)=>{
-    console.log(req.path,req.method)
+app.use((req, res, next) => {
+    console.log(req.path, req.method)
     next()
 })
 
 
 // //routes
-    app.get('/api/health', (req, res) => {
-        res.status(200).json({
-            status: 'ok',
-            service: 'ZeroHunger Backend API',
-            database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
-            timestamp: new Date().toISOString()
-        })
+app.get('/api/health', (req, res) => {
+    res.status(200).json({
+        status: 'ok',
+        service: 'ZeroHunger Backend API',
+        database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+        timestamp: new Date().toISOString()
     })
+})
 
-    app.use('/auth', authRoutes)
-    app.use('/api/workouts', requireAuth, workoutRoutes)
-    // Volunteer Route
-    app.use('/volunteer/delivery-jobs', requireAuth, volunteerRoutes)
-    // Admin Route
-    app.use('/admin/approves', requireAuth, adminRoutes)
-    // Organization Route
-    app.use('/org', requireAuth, orgRoutes)
-    // Donor Route
-    app.use('/donor', requireAuth, donorRoutes)
+app.use('/auth', authRoutes)
+app.use('/api/workouts', requireAuth, workoutRoutes)
+// Volunteer Route
+app.use('/volunteer/delivery-jobs', requireAuth, volunteerRoutes)
+// Admin Route
+app.use('/admin/approves', requireAuth, adminRoutes)
+// Organization Route
+app.use('/org', requireAuth, orgRoutes)
+// Donor Route
+app.use('/donor', requireAuth, donorRoutes)
 
 //Connect to db
 mongoose.connect(process.env.MONGO_URI)
-    .then(()=>{
+    .then(() => {
         //listen for requests
         const server = app.listen(PORT, () => {
             console.log('connected to DB & listening on port', PORT)
