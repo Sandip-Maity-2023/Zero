@@ -10,6 +10,8 @@ const volunteerRoutes = require('./routes/volunteerRoutes')
 const adminRoutes = require('./routes/adminRoutes')
 const orgRoutes = require('./routes/org/orgAidRequest.js')
 const donorRoutes = require('./routes/donor/provideDonation')
+const authRoutes = require('./routes/authRoutes')
+const requireAuth = require('./middleware/auth')
 
 //express app
 const app = express();
@@ -26,15 +28,16 @@ app.use((req,res,next)=>{
 
 
 // //routes
-    app.use('/api/workouts',workoutRoutes)
+    app.use('/auth', authRoutes)
+    app.use('/api/workouts', requireAuth, workoutRoutes)
     // Volunteer Route
-    app.use('/volunteer/delivery-jobs',volunteerRoutes)
+    app.use('/volunteer/delivery-jobs', requireAuth, volunteerRoutes)
     // Admin Route
-    app.use('/admin/approves',adminRoutes)
+    app.use('/admin/approves', requireAuth, adminRoutes)
     // Organization Route
-    app.use('/org',orgRoutes)
+    app.use('/org', requireAuth, orgRoutes)
     // Donor Route
-    app.use('/donor',donorRoutes)
+    app.use('/donor', requireAuth, donorRoutes)
 
 //Connect to db
 mongoose.connect(process.env.MONGO_URI)
