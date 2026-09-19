@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import API_URL from '../../api';
 
 function VolunteerDeliveryAccept () {
 
@@ -51,7 +52,8 @@ useEffect(() => {
 const fetchDeliveryRequests = async () =>{
   
     //Fetch Delivery Requests
-    const response = await axios.get("http://localhost:4000/donor/volunteer-delivery");
+    //const response = await axios.get("http://localhost:4000/donor/volunteer-delivery");
+    const response = await axios.get(`${API_URL}/donor/volunteer-delivery`);
 
     //Set to State
     setDeliveryRequests(response.data);
@@ -127,11 +129,14 @@ const createDeliveryJob = async (e) => {
   };
 
   //Send the create request
-  const response = await axios.post("http://localhost:4000/volunteer/delivery-jobs",deliveryJobDetails);
+ // const response = await axios.post("http://localhost:4000/volunteer/delivery-jobs",deliveryJobDetails);
+  const response = await axios.post(`${API_URL}/volunteer/delivery-jobs`, deliveryJobDetails);
+
   console.log(response); 
 
   //Delete Related Donor Record
-  const deleteResponse = await axios.delete(`http://localhost:4000/donor/${deliveryAccept._id}`);
+  //const deleteResponse = await axios.delete(`http://localhost:4000/donor/${deliveryAccept._id}`);
+  const deleteResponse = await axios.delete(`${API_URL}/donor/${deliveryAccept._id}`);
   
   if(deleteResponse){
   

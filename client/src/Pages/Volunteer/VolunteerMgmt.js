@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import API_URL from '../../api';
 
 function VolunteerMgmt () {
 
@@ -47,7 +48,8 @@ useEffect(() => {
 const fetchVolunteerJobs = async () => {
 
     //Fetch Delivery Requests
-    const response = await axios.get(`http://localhost:4000/volunteer/delivery-jobs/user-jobs/${volunteerId}`);
+   // const response = await axios.get(`http://localhost:4000/volunteer/delivery-jobs/user-jobs/${volunteerId}`);
+    const response = await axios.get(`${API_URL}/volunteer/delivery-jobs/user-jobs/${volunteerId}`);
 
     //Set to State
     setVolunteerJobs(response.data);
@@ -59,7 +61,9 @@ const toggleDeclineDelivery =  async (volunteerJob) =>{
   const deleteId = volunteerJob._id;
   
   //Delete Related Donor Record
-  const deleteResponse = await axios.delete(`http://localhost:4000/volunteer/delivery-jobs/${deleteId}`);
+  //const deleteResponse = await axios.delete(`http://localhost:4000/volunteer/delivery-jobs/${deleteId}`);
+  const deleteResponse = await axios.delete(`${API_URL}/volunteer/delivery-jobs/${deleteId}`);
+
   console.log(deleteResponse);
 
   if (deleteResponse){
@@ -83,7 +87,8 @@ const toggleDeclineDelivery =  async (volunteerJob) =>{
   }
 
   //Send the create request
-  const response = await axios.post("http://localhost:4000/donor",repostDonation);
+ // const response = await axios.post("http://localhost:4000/donor",repostDonation);
+  const response = await axios.post(`${API_URL}/donor`, repostDonation);
   
   if(response){
   console.log(response);
@@ -164,7 +169,8 @@ const updateDeliveryJob = async (e) => {
     volunteerTelephoneNo:updateDelivery.volunteerTelephoneNo};
 
     //Send the update request
-    const response = await axios.patch(`http://localhost:4000/volunteer/delivery-jobs/${updateDelivery._id}`,deliveryJobUpdateDetails)
+   // const response = await axios.patch(`http://localhost:4000/volunteer/delivery-jobs/${updateDelivery._id}`,deliveryJobUpdateDetails)
+    const response = await axios.patch(`${API_URL}/volunteer/delivery-jobs/${updateDelivery._id}`, deliveryJobUpdateDetails)
    
    
    if(response){

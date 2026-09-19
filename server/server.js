@@ -13,6 +13,7 @@ const donorRoutes = require('./routes/donor/provideDonation')
 
 //express app
 const app = express();
+const PORT = process.env.PORT || 4000;
 
 // //middleware
 app.use(express.json())
@@ -38,10 +39,19 @@ app.use((req,res,next)=>{
 //Connect to db
 mongoose.connect(process.env.MONGO_URI)
     .then(()=>{
-        //listen for requests 
-        app.listen(process.env.PORT, () => {
-            console.log('connected to DB & listening on port', process.env.PORT)
-        })
+        //listen for requests
+        const server = app.listen(PORT, () => {
+            console.log('connected to DB & listening on port', PORT)
+        });
+
+        server.on('error', (error) => {
+            if (error.code === 'EADDRINUSE') {
+                console.error(`Port ${PORT} is already in use. Stop the running server or set another PORT in .env.`);
+                process.exit(1);
+            }
+
+            throw error;
+        });
     })
     .catch((error) => {
         console.log(error)

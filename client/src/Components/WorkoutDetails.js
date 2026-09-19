@@ -19,8 +19,8 @@ useEffect(() => {
 const fetchWorkouts = async () =>{
   
   //Fetch workouts
-const response = await axios.get("http://localhost:4000/api/workouts");
-
+//const response = await axios.get("http://localhost:4000/api/workouts");
+const response=await axios.get(`${process.env.APP_URL}/api/workouts`);
 //Set to State
   setWorkouts(response.data);
 };
@@ -30,7 +30,8 @@ const response = await axios.get("http://localhost:4000/api/workouts");
   const deleteWorkout = async (_id) => {
 
     //Delete the Workout
-    const response = await axios.delete(`http://localhost:4000/api/workouts/${_id}`)
+    //const response = await axios.delete(`http://localhost:4000/api/workouts/${_id}`)
+    const response=await axios.delete(`${process.env.APP_URL}/api/workouts/${_id}`);
     console.log("Hello");
     //Update State
     const newWorkouts = [...workouts].filter((workout) =>{

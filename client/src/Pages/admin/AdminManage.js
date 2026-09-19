@@ -57,7 +57,8 @@ function AdminManage() {
   const fetchAdminJobs = async () => {
     try {
       //Fetch Delivery Requests
-      const response = await axios.get(`http://localhost:4001/admin/approves/`);
+      //const response = await axios.get(`http://localhost:4001/admin/approves/`);
+      const response=await axios.get(`${process.env.APP_URL}/admin/approves/`);
       // const response = await axios.get(`http://localhost:4001/admin/approves/${adminId}`);
 
       //Set to State
@@ -74,7 +75,9 @@ function AdminManage() {
     const deleteId = adminJob._id;
 
     //Delete Related Donor Record
-    const deleteResponse = await axios.delete(`http://localhost:4001/admin/approves/${deleteId}`);
+    //const deleteResponse = await axios.delete(`http://localhost:4001/admin/approves/${deleteId}`);
+    const deleteResponse=await axios.delete(`${process.env.APP_URL}/admin/approves/${deleteId}`);
+
     console.log(deleteResponse);
 
     if (deleteResponse) {
@@ -114,7 +117,9 @@ function AdminManage() {
 
       //Send the create request
       try {
-        const response = await axios.post("http://localhost:4001/admin/approves/", repostAdmin);
+       // const response = await axios.post("http://localhost:4001/admin/approves/", repostAdmin);
+        const response=await axios.post(`${process.env.APP_URL}/admin/approves/`,repostAdmin);
+
         console.log(response);
       } catch (error) {
 
@@ -223,7 +228,8 @@ function AdminManage() {
     };
 
     //Send the update request
-    const response = await axios.patch(`http://localhost:4001/admin/approves/${updateAdmin._id}`, adminJobUpdateDetails)
+   // const response = await axios.patch(`http://localhost:4001/admin/approves/${updateAdmin._id}`, adminJobUpdateDetails);
+    const response =await axios.patch(`${process.env.APP_URL}/admin/approves/${updateAdmin._id}`,adminJobUpdateDetails);
     console.log(response);
 
     //Update the Admin Jobs List
