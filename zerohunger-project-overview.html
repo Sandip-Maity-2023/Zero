@@ -1,0 +1,320 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>ZeroHunger — Project Overview</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"Segoe UI",system-ui,sans-serif;font-size:14px;line-height:1.65;background:#ffffff;color:#1f2328}
+.page{max-width:820px;margin:0 auto;padding:40px 20px 60px}
+
+/* Hero */
+.hero{text-align:center;padding:40px 0 32px;border-bottom:1px solid #e5e7eb;margin-bottom:36px}
+.badge{display:inline-block;background:#ecfdf5;color:#15803d;border:1px solid #bbf7d0;border-radius:9999px;padding:4px 14px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
+.hero h1{font-size:28px;font-weight:800;color:#0f172a;letter-spacing:-.02em;margin-bottom:10px;line-height:1.2}
+.hero h1 span{color:#059669}
+.hero p{color:#57606a;font-size:15px;max-width:600px;margin:0 auto}
+
+/* Section */
+h2{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#57606a;margin:36px 0 14px;padding-bottom:6px;border-bottom:1px solid #e5e7eb}
+
+/* What / Why two-col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:4px}
+@media(max-width:600px){.two-col{grid-template-columns:1fr}}
+.info-box{background:#f7f8fa;border:1px solid #e5e7eb;border-radius:8px;padding:18px 20px}
+.info-box .label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+.info-box p{font-size:13px;color:#374151;line-height:1.65}
+.label-blue{color:#1d4ed8}.label-green{color:#15803d}.label-amber{color:#b45309}.label-purple{color:#6d28d9}.label-red{color:#b91c1c}
+
+/* Stats row */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:4px}
+@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:#f7f8fa;border:1px solid #e5e7eb;border-radius:8px;padding:14px;text-align:center}
+.stat-val{font-size:22px;font-weight:800;color:#0f172a;line-height:1}
+.stat-lbl{font-size:11px;color:#57606a;margin-top:4px;font-weight:500}
+
+/* Roles */
+.roles{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(max-width:600px){.roles{grid-template-columns:1fr}}
+.role-card{border-radius:8px;border:1px solid #e5e7eb;padding:18px 20px;position:relative;overflow:hidden}
+.role-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.rc-org::before{background:#6d28d9}
+.rc-donor::before{background:#15803d}
+.rc-vol::before{background:#b45309}
+.rc-admin::before{background:#b91c1c}
+.role-icon{font-size:28px;margin-bottom:10px}
+.role-name{font-size:14px;font-weight:700;color:#0f172a;margin-bottom:6px}
+.role-desc{font-size:12.5px;color:#57606a;margin-bottom:12px;line-height:1.6}
+.task-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.task-list li{font-size:12px;color:#374151;display:flex;align-items:flex-start;gap:6px}
+.task-list li::before{content:'→';color:#059669;font-weight:700;flex-shrink:0;margin-top:1px}
+.role-route{margin-top:12px;font-size:11px;font-weight:600;color:#57606a;background:#f7f8fa;border:1px solid #e5e7eb;border-radius:4px;padding:4px 8px;display:inline-block}
+
+/* Flow */
+.flow{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin-bottom:4px}
+.flow-step{background:#f7f8fa;border:1px solid #e5e7eb;border-radius:8px;padding:10px 14px;font-size:12px;text-align:center;flex:1;min-width:110px}
+.flow-step strong{display:block;font-size:13px;font-weight:700;color:#0f172a;margin-bottom:3px}
+.flow-arrow{color:#94a3b8;font-size:18px;padding:0 4px;flex-shrink:0}
+@media(max-width:600px){.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}}
+
+/* Beneficiaries */
+.bene-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:600px){.bene-grid{grid-template-columns:1fr}}
+.bene-card{background:#f7f8fa;border:1px solid #e5e7eb;border-radius:8px;padding:14px}
+.bene-icon{font-size:22px;margin-bottom:8px}
+.bene-title{font-size:13px;font-weight:700;color:#0f172a;margin-bottom:4px}
+.bene-desc{font-size:12px;color:#57606a;line-height:1.6}
+
+/* Structure */
+.struct-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.struct-table th{background:#f7f8fa;border:1px solid #e5e7eb;padding:8px 10px;text-align:left;font-weight:600;color:#374151}
+.struct-table td{border:1px solid #e5e7eb;padding:8px 10px;vertical-align:top;color:#374151}
+.struct-table tr:nth-child(even) td{background:#fafafa}
+.mono{font-family:"Cascadia Code","Consolas",monospace;font-size:11.5px;background:#f0f4f8;padding:2px 5px;border-radius:3px;color:#1d4ed8}
+
+/* SDG tag */
+.sdg-bar{background:linear-gradient(135deg,#059669,#0d9488);color:#fff;border-radius:8px;padding:16px 20px;margin-bottom:4px;display:flex;align-items:center;gap:14px}
+.sdg-icon{font-size:32px;flex-shrink:0}
+.sdg-bar h3{font-size:14px;font-weight:700;margin-bottom:2px}
+.sdg-bar p{font-size:12.5px;opacity:.9}
+
+footer{margin-top:48px;padding-top:12px;border-top:1px solid #e5e7eb;text-align:center;font-size:12px;color:#57606a}
+</style>
+</head>
+<body>
+<div class="page">
+
+  
+  <div class="hero">
+    <div class="badge">🌱 UN SDG Goal 2 — Zero Hunger</div>
+    <h1>Zero<span>Hunger</span> Platform</h1>
+    <p>A digital coordination system that bridges food surplus with food need — connecting donors, volunteers, and community organisations in one unified ecosystem.</p>
+  </div>
+
+  
+  <div class="sdg-bar">
+    <div class="sdg-icon">🎯</div>
+    <div>
+      <h3>Aligned with United Nations SDG 2: Zero Hunger</h3>
+      <p>End hunger, achieve food security, improve nutrition, and promote sustainable agriculture by 2030. ZeroHunger operationalises this goal at the community level through technology.</p>
+    </div>
+  </div>
+
+  
+  <h2>What it is &amp; Why it exists</h2>
+  <div class="two-col">
+    <div class="info-box">
+      <div class="label label-blue">What is ZeroHunger?</div>
+      <p>A full-stack MERN web application that digitises the entire food-aid supply chain — from a donor's kitchen shelf to a community shelter's dining table. It provides a single platform where organisations post food requests, donors pledge supplies, and volunteers handle last-mile delivery, all tracked in real time.</p>
+    </div>
+    <div class="info-box">
+      <div class="label label-green">Why was it built?</div>
+      <p>Every year, billions of kg of food is wasted while millions go hungry. The core problem is not shortage — it is <strong>coordination failure</strong>. There is no easy way for a restaurant with leftover food to know which shelter needs it, or for a volunteer to know where to pick up and drop off. ZeroHunger solves this coordination gap with a structured, role-based digital workflow.</p>
+    </div>
+  </div>
+
+  
+  <h2>Platform Impact</h2>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">12,450+</div><div class="stat-lbl">🍲 Meals Provided</div></div>
+    <div class="stat"><div class="stat-val">85+</div><div class="stat-lbl">🏛️ Organisations</div></div>
+    <div class="stat"><div class="stat-val">320+</div><div class="stat-lbl">🚴 Volunteer Couriers</div></div>
+    <div class="stat"><div class="stat-val">100%</div><div class="stat-lbl">🤝 Community Driven</div></div>
+  </div>
+
+  
+  <h2>How it Works — Donation Lifecycle</h2>
+  <div class="flow">
+    <div class="flow-step"><strong>🏛️ Organisation</strong>Posts food-aid request with headcount &amp; location</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><strong>🎁 Donor</strong>Browses requests, pledges food donation</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><strong>🚴 Volunteer</strong>Accepts delivery job, picks up from donor</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><strong>✅ Delivered</strong>Food reaches the community in need</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><strong>🛡️ Admin</strong>Oversees, approves &amp; audits all activity</div>
+  </div>
+  <p style="font-size:12px;color:#57606a;margin-top:8px">Donation status lifecycle: <strong>pending → accepted → in-transit → delivered</strong></p>
+
+  
+  <h2>Role-Based System — Who does what?</h2>
+  <div class="roles">
+
+    <div class="role-card rc-org">
+      <div class="role-icon">🏛️</div>
+      <div class="role-name">Organisation</div>
+      <div class="role-desc">Community pantries, orphanages, shelters, and non-profits that represent communities in need of food aid.</div>
+      <ul class="task-list">
+        <li>Register with org name &amp; registration number</li>
+        <li>Submit food-aid requests with headcount, date, location &amp; details</li>
+        <li>View and manage all submitted requests</li>
+        <li>Track which donors and volunteers are fulfilling requests</li>
+      </ul>
+      <span class="role-route">Dashboard: /organization-home</span>
+    </div>
+
+    <div class="role-card rc-donor">
+      <div class="role-icon">🎁</div>
+      <div class="role-name">Donor</div>
+      <div class="role-desc">Restaurants, caterers, grocery stores, event organisers, and individuals with surplus food to contribute.</div>
+      <ul class="task-list">
+        <li>Browse open food-aid requests from organisations</li>
+        <li>Pledge a food donation with size, type &amp; pickup location</li>
+        <li>Choose delivery method (self-drop or volunteer delivery)</li>
+        <li>Track donation status in real time (pending → delivered)</li>
+        <li>View full history of past donations</li>
+      </ul>
+      <span class="role-route">Dashboard: /donor-home</span>
+    </div>
+
+    <div class="role-card rc-vol">
+      <div class="role-icon">🚴</div>
+      <div class="role-name">Volunteer</div>
+      <div class="role-desc">Drivers, cyclists, and couriers who handle last-mile food delivery from donor locations to receiving organisations.</div>
+      <ul class="task-list">
+        <li>Browse available unassigned delivery jobs</li>
+        <li>Accept a job by providing NIC, vehicle number &amp; telephone</li>
+        <li>Pick up food from donor's location</li>
+        <li>Deliver to the organisation and update status</li>
+        <li>View history of all personal delivery jobs</li>
+      </ul>
+      <span class="role-route">Dashboard: /volunteer-home</span>
+    </div>
+
+    <div class="role-card rc-admin">
+      <div class="role-icon">🛡️</div>
+      <div class="role-name">Admin</div>
+      <div class="role-desc">Platform administrators who maintain trust, quality, and safety across all platform interactions.</div>
+      <ul class="task-list">
+        <li>Review and approve new user registrations</li>
+        <li>Monitor all pending approval requests</li>
+        <li>Manage and audit platform activity</li>
+        <li>Remove or suspend accounts if needed</li>
+      </ul>
+      <span class="role-route">Dashboard: /admin-home</span>
+    </div>
+
+  </div>
+
+  
+  <h2>Who Benefits?</h2>
+  <div class="bene-grid">
+    <div class="bene-card">
+      <div class="bene-icon">👨‍👩‍👧‍👦</div>
+      <div class="bene-title">Communities in Need</div>
+      <div class="bene-desc">Families, children, elderly, and homeless individuals served by registered organisations receive consistent, dignified food support.</div>
+    </div>
+    <div class="bene-card">
+      <div class="bene-icon">🍽️</div>
+      <div class="bene-title">Food Businesses</div>
+      <div class="bene-desc">Restaurants, caterers, and grocery stores reduce food waste while contributing to a social cause — fulfilling ESG and CSR goals.</div>
+    </div>
+    <div class="bene-card">
+      <div class="bene-icon">❤️</div>
+      <div class="bene-title">Volunteers</div>
+      <div class="bene-desc">Individuals who want to give back to society get a structured, trackable way to contribute meaningful time and effort.</div>
+    </div>
+    <div class="bene-card">
+      <div class="bene-icon">🏥</div>
+      <div class="bene-title">Non-Profits &amp; Shelters</div>
+      <div class="bene-desc">Organisations gain a reliable digital tool to request, track, and manage food aid — reducing manual coordination overhead.</div>
+    </div>
+    <div class="bene-card">
+      <div class="bene-icon">🌍</div>
+      <div class="bene-title">Society &amp; the Planet</div>
+      <div class="bene-desc">Reduced food waste means lower greenhouse gas emissions. Every kg of food redirected is a step toward a more sustainable world.</div>
+    </div>
+    <div class="bene-card">
+      <div class="bene-icon">📊</div>
+      <div class="bene-title">Policymakers &amp; NGOs</div>
+      <div class="bene-desc">Aggregated data on meals provided, active organisations, and delivery coverage can inform food security policy and funding decisions.</div>
+    </div>
+  </div>
+
+  
+  <h2>Project Structure</h2>
+  <table class="struct-table">
+    <thead>
+      <tr><th>Layer</th><th>Location</th><th>Technology</th><th>Purpose</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Frontend</strong></td>
+        <td><span class="mono">client/src/</span></td>
+        <td>React 18, React Router v6, Axios</td>
+        <td>Role-based SPA with protected routes, JWT auth context, and global Gemini AI chat assistant</td>
+      </tr>
+      <tr>
+        <td><strong>Backend API</strong></td>
+        <td><span class="mono">server/</span></td>
+        <td>Node.js, Express 4, JWT, bcryptjs</td>
+        <td>REST API with role-protected endpoints, JWT middleware, and MongoDB connectivity</td>
+      </tr>
+      <tr>
+        <td><strong>Database</strong></td>
+        <td>MongoDB Atlas</td>
+        <td>MongoDB, Mongoose ODM</td>
+        <td>Stores Users, OrgAidRequests, ProvideDonations, Volunteer delivery records, Admin approvals</td>
+      </tr>
+      <tr>
+        <td><strong>Auth</strong></td>
+        <td><span class="mono">middleware/auth.js</span></td>
+        <td>jsonwebtoken</td>
+        <td>Issues JWT on login; <span class="mono">requireAuth</span> middleware verifies token on every protected route</td>
+      </tr>
+      <tr>
+        <td><strong>AI Assistant</strong></td>
+        <td><span class="mono">HelpChat.js</span></td>
+        <td>Gemini 2.0 Flash API</td>
+        <td>Floating chat bubble on every page — answers user queries about platform features and usage</td>
+      </tr>
+      <tr>
+        <td><strong>Shared UI</strong></td>
+        <td><span class="mono">Components/</span></td>
+        <td>React + CSS Variables</td>
+        <td>Navbar (role-aware), Footer (global), ProtectedRoute (role guard), HelpChat (AI assistant)</td>
+      </tr>
+      <tr>
+        <td><strong>Config / Docs</strong></td>
+        <td><span class="mono">.bob/ + AGENTS.md</span></td>
+        <td>IBM Bob AI</td>
+        <td>Project context, coding rules, and mode-specific guidelines for IBM Bob AI interactions</td>
+      </tr>
+    </tbody>
+  </table>
+
+  
+  <h2>Key Data Models</h2>
+  <table class="struct-table">
+    <thead>
+      <tr><th>Model</th><th>Collection</th><th>Key Fields</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>User</strong></td>
+        <td><span class="mono">users</span></td>
+        <td>email, password (hashed), role (organization | volunteer | donor | admin), firstName, lastName, orgName, registrationNo</td>
+      </tr>
+      <tr>
+        <td><strong>OrgAidRequest</strong></td>
+        <td><span class="mono">orgaidrequests</span></td>
+        <td>orgId, orgName, requestTitle, population, dueDate, orgLocation, orgTelephone, orgOtherDetails</td>
+      </tr>
+      <tr>
+        <td><strong>ProvideDonation</strong></td>
+        <td><span class="mono">providedonations</span></td>
+        <td>donorId, donorName, donationSize, deliveryMethod, donorLocation, status (pending→accepted→in-transit→delivered), volunteerId, vehicleNo</td>
+      </tr>
+      <tr>
+        <td><strong>Volunteer</strong></td>
+        <td><span class="mono">volunteers</span></td>
+        <td>Denormalised delivery record combining donor + org fields: volunteerId, NIC, vehicleNo, volunteerTelephoneNo, + full donation context</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+<footer>Made with IBM Bob</footer>
+</body>
+</html>
