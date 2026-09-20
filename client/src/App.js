@@ -4,6 +4,8 @@ import ProtectedRoute from './Components/ProtectedRoute';
 
 // Layout & Components
 import Navbar from './Components/Navbar';
+import Footer from './Components/Footer';
+import HelpChat from './Components/HelpChat';
 
 // Landing & Auth Pages
 import LandingPage from './Pages/Landing Pages/LandingPage';
@@ -151,6 +153,8 @@ function App() {
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </div>
+          <Footer />
+          <HelpChat />
         </BrowserRouter>
       </div>
     </AuthProvider>
