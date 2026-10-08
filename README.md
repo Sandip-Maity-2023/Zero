@@ -13,23 +13,22 @@ ZeroHunger is aligned with **United Nations Sustainable Development Goal 2: Zero
 
 ## Contents
 
-- [Product overview](#product-overview)
-- [Capabilities](#capabilities)
-- [Architecture](#architecture)
-- [Technology stack](#technology-stack)
-- [Repository structure](#repository-structure)
-- [Core workflows](#core-workflows)
-- [Authentication and authorization](#authentication-and-authorization)
-- [API reference](#api-reference)
-- [Data model](#data-model)
-- [Local development](#local-development)
-- [Environment configuration](#environment-configuration)
-- [Production deployment](#production-deployment)
-- [Quality and verification](#quality-and-verification)
-- [Security and operational notes](#security-and-operational-notes)
-- [Troubleshooting](#troubleshooting)
-- [Contribution guide](#contribution-guide)
-- [Roadmap](#roadmap)
+- [1. Product overview](#product-overview)
+- [2. Capabilities](#capabilities)
+- [3. Architecture](#architecture)
+- [4. Technology stack](#technology-stack)
+- [5. Repository structure](#repository-structure)
+- [6. Core workflows](#core-workflows)
+- [7. Authentication and authorization](#authentication-and-authorization)
+- [8. API reference](#api-reference)
+- [9. Data model](#data-model)
+- [10. Local development](#local-development)
+- [11. Environment configuration](#environment-configuration)
+- [12. Production deployment](#production-deployment)
+- [13. Quality and verification](#quality-and-verification)
+- [14. Security and operational notes](#security-and-operational-notes)
+- [16. Contribution guide](#contribution-guide)
+- [17. Roadmap](#roadmap)
 
 ## Product overview
 
@@ -469,56 +468,10 @@ The server package currently does not define automated tests. Add controller and
 
 - Passwords are hashed before persistence; plaintext passwords should never be stored.
 - JWTs are currently stored in browser `localStorage`. This is convenient for the SPA but should be reviewed against an HttpOnly secure-cookie strategy for high-risk production deployments.
-- `JWT_SECRET` must be supplied through deployment secrets, not source control.
-- Client-side role guards are not sufficient for authorization. Server controllers should validate both role and resource ownership for every mutation.
-- Add rate limiting and account lockout protections around authentication endpoints.
-- Add schema validation and consistent error responses at the API boundary.
+- Add schema validation
 - Replace console request logging with structured, redacted logs in production.
 - Restrict CORS to the deployed frontend origin.
-- Avoid exposing provider API keys in browser bundles unless the provider explicitly supports that threat model.
 
-## Troubleshooting
-
-### The client cannot reach the API
-
-1. Confirm the backend is running on port `4000`.
-2. Open `/api/health` directly.
-3. Check `client/src/.env` and ensure `REACT_APP_API_URL` has no trailing path typo.
-4. Restart the React development server after changing environment variables.
-
-### MongoDB connection fails
-
-1. Confirm MongoDB is running or the Atlas cluster is reachable.
-2. Check `MONGO_URI` for spelling, credentials, and network allow-list settings.
-3. Check the server terminal for the connection error.
-
-### A user is redirected away from a page
-
-The page is protected by role. Log out, log in with an account whose role matches the page, and confirm the JWT exists in browser storage.
-
-### Deployed React routes return 404
-
-Ensure the host is using the included SPA rewrite configuration from `client/vercel.json`, or configure an equivalent fallback from all application paths to `index.html`.
-
-## Contribution guide
-
-1. Create a focused branch from the default branch.
-2. Keep changes within the relevant client or server layer.
-3. Follow the repository conventions in [AGENTS.md](./AGENTS.md).
-4. Use the shared Axios client for new frontend API calls.
-5. Protect new server routes with `requireAuth` when they are not public.
-6. Add or update role guards for new client routes.
-7. Run `npm run build` in `client/`.
-8. Describe behavior changes and verification steps in the pull request.
-
-### Pull request checklist
-
-- [ ] Scope is focused and the user workflow is described.
-- [ ] Environment variables are documented without exposing secrets.
-- [ ] API and route changes are documented.
-- [ ] Authorization behavior is verified.
-- [ ] Client build passes.
-- [ ] Tests are added or the reason they are not applicable is stated.
 
 ## Roadmap
 
