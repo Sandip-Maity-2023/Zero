@@ -27,8 +27,7 @@ ZeroHunger is aligned with **United Nations Sustainable Development Goal 2: Zero
 - [12. Production deployment](#production-deployment)
 - [13. Quality and verification](#quality-and-verification)
 - [14. Security and operational notes](#security-and-operational-notes)
-- [16. Contribution guide](#contribution-guide)
-- [17. Roadmap](#roadmap)
+- [16. Roadmap](#roadmap)
 
 ## Product overview
 
