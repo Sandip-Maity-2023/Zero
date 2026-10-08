@@ -9,7 +9,7 @@
 
 ZeroHunger is aligned with **United Nations Sustainable Development Goal 2: Zero Hunger**. It provides one shared workflow for the organisations that identify food needs, donors who can supply food, volunteers who can transport it, and administrators who oversee platform activity.
 
-**Live frontend:** [zero-ruby-eight.vercel.app](https://zero-ruby-eight.vercel.app)
+**Live:** [zero-ruby-eight.vercel.app](https://zero-ruby-eight.vercel.app)
 
 ## Contents
 
